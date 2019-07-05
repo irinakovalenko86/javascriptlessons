@@ -5,7 +5,7 @@ const items = ['Tomato', 'Potato', 'Cucumber', 'Cherry', 'Cabbage', 'Watermelon'
 const prices = [300, 60, 980, 360, 34, 80]; //заглушка типа БД
 const ids = [0, 1, 2, 3, 4, 5];
 
-const PRODUCTS = fetchData (); //заглушка ответа с сервера
+//const PRODUCTS = fetchData (); //заглушка ответа с сервера
 const userCart = [];
 var cartBlock = document.querySelector('.cart-block');
 
@@ -48,7 +48,8 @@ class ProductList{
 
 	fetchProducts()
 	{
-		this.products = fetchData();
+		//this.products = fetchData();
+		products = makeGETRequest("https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/catalogData.json");
 	}
 
 	render () {
@@ -125,7 +126,7 @@ class CartItem{
 	}
 }
 
-function fetchData () {
+/*function fetchData () {
 	let arr = [];
 	for (let i = 0; i < items.length; i++) {
 		arr.push ({
@@ -136,9 +137,40 @@ function fetchData () {
 		});
 	}
 	return arr
+}*/
+
+
+
+function makeGETRequest(url) {
+
+	var promise = new Promise(
+		function (resolve, reject)
+		{
+			var xhr;
+  
+			if (window.XMLHttpRequest) {
+	  			xhr = new XMLHttpRequest();
+			} else if (window.ActiveXObject) { 
+	  			xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+  
+			xhr.onreadystatechange = function () {
+	  			if (xhr.readyState === 4) {
+					resolve(xhr.responseText);//callback(xhr.responseText);
+	  			}
+			}
+  
+			xhr.open('GET', url, true);
+			xhr.send();
+			resolve(xhr.responseText);
+		}
+	);
+
+	promise.then(function(res){
+		return res;
+	})
+	
 }
-
-
 
 let productList = new ProductList();
 let cart = new Cart();
