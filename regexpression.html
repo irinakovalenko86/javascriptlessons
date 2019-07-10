@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const str = "She doesn't say: 'I like milk'";
+        let resultString = str.replace(/^'|(\s)'|'(\s)|'$/g, '$1"$2');
+        console.log(resultString);
+    </script>
+</body>
+</html>

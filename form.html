@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <div class="field-block">
+            <label for="name">Ваше имя:</label>
+            <input id="name" class="field" name="name" required type="text">
+        </div>
+        <div class="field-block">
+            <label for="email">Ваш E-mail:</label>
+            <input id="email" class="field" name="email" required type="email">
+        </div>
+        <div class="field-block">
+            <label for="phone">Ваш телефон:</label>
+            <input id="phone" class="field" name="phone" required type="text">
+        </div>
+        <div class="field-block">
+            <label for="message">Текст сообщения:</label>
+            <textarea id="message" class="field" required name="message" rows="4"></textarea>
+        </div>
+        <button id="button" class="button" type="submit">Отправить</button>
+    </form>
+    <script>
+        document.querySelector("#button").addEventListener("click", function() {
+            var nameElement = document.getElementById("name");
+            let regName = /^[A-Za-zА-Яа-я]*$/g;
+            if (!regName.test(nameElement.value)){
+                nameElement.style.borderColor = "red";
+            }
+
+            let mailElement = document.getElementById("email");
+            let regEmail = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+            if (!regEmail.test(mailElement.value))
+            {
+                mailElement.style.bor = "red";
+            }
+
+            let phoneElement = document.getElementById("phone");
+            let regPhone = /^\+7+\(+\d{3}+\)+\d{3}-\d{4}$/;
+            if (!regPhone.test(phoneElement.value))
+            {
+                phoneElement.style.borderColor = "red";
+            }
+
+        })
+    </script>
+</body>
+</html>
