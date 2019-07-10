@@ -5,6 +5,8 @@ const items = ['Tomato', 'Potato', 'Cucumber', 'Cherry', 'Cabbage', 'Watermelon'
 const prices = [300, 60, 980, 360, 34, 80]; //заглушка типа БД
 const ids = [0, 1, 2, 3, 4, 5];
 
+const API = "https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses";
+
 //const PRODUCTS = fetchData (); //заглушка ответа с сервера
 const userCart = [];
 var cartBlock = document.querySelector('.cart-block');
@@ -139,7 +141,149 @@ class CartItem{
 	return arr
 }*/
 
+class List{
+	constructor(url, container){
+		this.container = container;
+		this.url = url;
+		this.goods = [];
+		this.allProducts = [];
+		//this.filtred = [];
+		this._init();
+	}
 
+	_init(){
+		return false;
+	}
+
+	getJSON()
+	{
+		return fetch(url ? url : `${API + url}`)
+				.then(result => result.json())
+				.catch(error => {
+					console.log(error);
+				})
+	}
+
+	handleData(data){
+		this.goods = [...data];
+		this.render();
+	}
+
+	render(){
+		const block = document.querySelector(this.container);
+		for (let product of this.goods)
+		{
+			const prod = new lists[this.constructor.name](product);
+			this.allProducts.push(prod);
+			block.insertAdjacentHTML("beforeend", prod.render());
+		}
+	}
+}
+
+class Item{
+	constructor(el, img = 'https://placehold.it/200x150'){
+		this.product_name = el.product_name;
+		this.id_product = el.id_product,
+		this.img = el.img
+		this.price = el.price
+	}
+
+	render(){
+		return `<div class="product-item" data-id="${this.id}>
+						<img src="${this.img}" alt="some image">
+						<div class="desc"
+							<h3>${this.name}</h3>
+							<p>${this.price}</p>
+							<button class="buy-btn" 
+							data-id="${this.id}"
+							data-name="${this.name}"
+							data-price="${this.price}">КУПИТЬ</button>
+						</div>
+					</div>`
+	}
+}
+
+class ProductItem extends Item {}
+class CartItem extends Item {
+	constructor(el, img = "https://placehold.it/100x80"){
+		super(el, img);
+		this.quantity = el.quantity;
+	}
+
+	render(){
+		`<div class="cart-item" data-id="${this.id_product}>
+							<div class="product-bio">
+								<img src="${this.img}" alt="some image">
+								<div class="product-desc"
+									<p class="product-title">${this.name}</p>
+									<p class="product-quantity">${this.quantity}</p>
+									<p class="product-single-price">${this.price}</p>
+								</div>
+								<div class="right-block">
+									<button class="del-btn" data-id="${this.id_product}">&times;</button>
+								</div>
+							</div>
+						</div>`
+	}
+}
+
+class ProductsList extends List{
+	constructor(cart, url = "/catalogData.json", container = ".product"){
+		super(url, container);
+		this.cart = cart;
+		this.getJSON()
+			.then(data => this.handleData(data));
+	}
+
+	_init(){
+		document.querySelector(this.container).addEventListener("click", evt => {
+			if (evt.target.classList.contains("buy-btn")){
+				evt.preventDefault();
+				this.cart.addProduct(evt.target);
+			}
+		})
+	}
+}
+
+class Cart extends List{
+	constructor(url = "/getBasket.json", container = ".cart"){
+		super(url, container);
+		this.getJSON()
+		.then(data => this.handleData(data.contents))
+	}
+
+	addProduct(element){
+		this.getJSON(`${API}/addToBasket.json`)
+			.then(data => {
+				if (data.result){
+					let productID = +element.dataset['id'];
+					let find = this.allProducts.find (element => element.id === productID); //element (true) / false
+	
+					if (!find) {
+						userCart.push ({
+							id: productID,
+							name: product.dataset['name'],
+							price: +product.dataset['price'],
+							img: cartImage,
+							quantity: 1
+					})
+					} else {
+						find.quantity ++
+					}
+					this.renderCart();
+				}
+			})
+	}
+
+	removeProduct(){
+
+	}
+}
+
+let lists = {
+	ProductsList: ProductItem,
+	Cart: CartItem
+}
 
 function makeGETRequest(url) {
 
